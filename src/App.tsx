@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import IntroAnimation from "./components/ui/scroll-morph-hero"
 
 const categories = [
   "Abstract",
@@ -521,8 +522,6 @@ export default function App() {
 
   const [comments, setComments] = useState<Record<string, string[]>>({})
 
-  const [spot, setSpot] = useState<[number, number] | null>(null)
-
   const [page, setPage] = useState<Page>(() => {
     if (typeof window === "undefined") return "home"
 
@@ -672,68 +671,17 @@ export default function App() {
       {page === "home" ? (
         <main id="top">
           <section
-            className="relative hidden min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#F0F7FF] px-5 pt-14 pb-12 sm:flex sm:min-h-0 sm:px-8 sm:pt-20 sm:pb-16 lg:px-12 lg:pt-24 lg:pb-20"
-            onMouseMove={(event) => {
-              const rect = event.currentTarget.getBoundingClientRect()
-              setSpot([event.clientX - rect.left, event.clientY - rect.top])
-            }}
-            onMouseLeave={() => setSpot(null)}
+            className="h-[100dvh] overflow-hidden"
+            aria-label="Intro animation"
           >
-            {/* Base artwork — always visible */}
-            <img
-              src="/wide-painting-2-2047559910.jpg"
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover"
+            <IntroAnimation
+              items={paintings}
+              onSelect={(index) => setSelectedPainting(paintings[index])}
             />
-
-            {/* Spotlight-revealed layer — the other 3 artworks, hidden by
-                default, revealed only inside a radial mask following the cursor */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-[5] grid grid-cols-3 transition-opacity duration-500"
-              style={{
-                opacity: spot ? 1 : 0,
-                maskImage: `radial-gradient(350px circle at ${spot?.[0] ?? 0}px ${spot?.[1] ?? 0}px, black 30%, transparent 100%)`,
-                WebkitMaskImage: `radial-gradient(350px circle at ${spot?.[0] ?? 0}px ${spot?.[1] ?? 0}px, black 30%, transparent 100%)`,
-              }}
-            >
-              <img
-                src="/images.jpg"
-                alt=""
-                className="h-full w-full object-cover"
-              />
-              <img
-                src="/oil-painting-OTZ1.webp"
-                alt=""
-                className="h-full w-full object-cover"
-              />
-              <img
-                src="/wall-art-print-canvas-poster-framed-australian-landscape-mountains-style-a-by-jessie-mitchelson-1.webp"
-                alt=""
-                className="h-full w-full object-cover"
-              />
-            </div>
-
-            {/* Opaque card — sits above the spotlight, keeps heading legible */}
-            <div className="relative z-10 mx-auto w-full max-w-[600px] bg-[#293241] px-8 py-10 sm:px-12 sm:py-14 lg:px-16 rounded-4xl">
-              <div className="lg:text-center">
-                <h1 className="font-display max-w-4xl text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em] text-[#F0F7FF] lg:mx-auto">
-                  Nastiia's
-                  <br />
-                  <span className="italic text-[#98C1D9]">Gallery.</span>
-                </h1>
-              </div>
-              <div className="mt-8 flex items-end justify-between border-t border-[#F0F7FF]/20 pt-4 lg:mx-auto lg:mt-12 lg:w-72 lg:flex-col lg:items-center lg:gap-3 lg:text-center">
-                <p className="max-w-48 text-sm leading-6 text-[#F0F7FF]/70 lg:max-w-none">
-                  works in colour, form, and feeling.
-                </p>
-                <span className="font-display text-3xl text-[#F0F7FF]">09</span>
-              </div>
-            </div>
           </section>
 
           <section
+            id="art-library"
             className="mx-auto max-w-[1440px] px-5 pb-20 sm:px-8 sm:pb-28 lg:px-12"
             aria-label="Painting collection"
           >
