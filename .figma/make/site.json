@@ -1,0 +1,10 @@
+{
+  "description": "Showcase a curated collection of paintings in a responsive art gallery format, designed for art enthusiasts to explore and appreciate visual art.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Playfair Display", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f0f7ff;
+  font-family: "DM Sans", sans-serif;
+}
+
+::selection {
+  background: #98c1d9;
+  color: #293241;
+}
+
+img {
+  display: block;
+}
+
+@keyframes gallery-carousel {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 0.625rem));
+  }
+}
+
+@keyframes artwork-click-cue {
+  0%,
+  35% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+.artwork-click-ring {
+  animation: artwork-click-cue 1.35s ease-out infinite;
+}
+
+.carousel-track {
+  animation: gallery-carousel 38s linear infinite;
+}
+
+.carousel-track-reverse {
+  animation-direction: reverse;
+}
+
+.carousel-viewport:hover .carousel-track,
+.carousel-viewport:focus-within .carousel-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-viewport {
+    overflow-x: auto;
+  }
+
+  .carousel-track {
+    animation: none;
+  }
+
+  .artwork-click-ring {
+    animation: none;
+  }
+  @keyframes fadeCue {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+}
