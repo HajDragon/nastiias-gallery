@@ -1,79 +1,118 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const categories = [
   "Abstract",
+
   "Geometric",
+
   "Color Field",
+
   "Expressionism",
+
   "Minimalism",
 ] as const
 
 type Category = typeof categories[number]
 
-type Page = "gallery" | "carousel" | "gallery-view"
+type Page = "home" | "gallery"
 
 const paintings = [
   {
     name: "Vermilion Weather",
+
     category: "Expressionism",
+
     image:
       "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Red, blue, and yellow abstract painting",
   },
+
   {
     name: "A Quiet Current",
+
     category: "Minimalism",
+
     image:
       "https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Blue, white, and yellow abstract painting",
   },
+
   {
     name: "The Shape of Memory",
+
     category: "Geometric",
+
     image:
       "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Colorful geometric abstract painting",
   },
+
   {
     name: "Soft Geometry",
+
     category: "Geometric",
+
     image:
       "https://images.unsplash.com/photo-1533208087231-c3618eab623c?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Pastel abstract painting",
   },
+
   {
     name: "In Bloom",
+
     category: "Abstract",
+
     image:
       "https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&fit=crop&w=1200&q=85",
+
     alt: "White and red abstract painting",
   },
+
   {
     name: "Blue Hour",
+
     category: "Color Field",
+
     image:
       "https://images.unsplash.com/photo-1531489956451-20957fab52f2?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Deep blue abstract painting",
   },
+
   {
     name: "Garden After Rain",
+
     category: "Abstract",
+
     image:
       "https://images.unsplash.com/photo-1618331835717-801e976710b2?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Yellow, green, and white abstract painting",
   },
+
   {
     name: "Between Two Tides",
+
     category: "Expressionism",
+
     image:
       "https://images.unsplash.com/photo-1586032788085-d75f745f26e0?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Red, blue, and white abstract painting",
   },
+
   {
     name: "The Last Light",
+
     category: "Color Field",
+
     image:
       "https://images.unsplash.com/photo-1531913764164-f85c52e6e654?auto=format&fit=crop&w=1200&q=85",
+
     alt: "Blue and red abstract painting",
   },
 ]
@@ -82,18 +121,25 @@ type Painting = typeof paintings[number]
 
 const masonryAspects = [
   "aspect-[3/4]",
+
   "aspect-[1/1]",
+
   "aspect-[4/5]",
+
   "aspect-[5/6]",
+
   "aspect-[3/4]",
+
   "aspect-[4/3]",
 ] as const
 
 function FilterBar({
   active,
+
   onChange,
 }: {
   active: "All" | Category
+
   onChange: (category: "All" | Category) => void
 }) {
   return (
@@ -130,7 +176,7 @@ function FilterBar({
 function ArtworkHoverCue() {
   return (
     <span
-      className="pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#293241]/10 opacity-0 group-hover/image:animate-[fadeCue_1.5s_ease-in-out_forwards]"
+      className="artwork-hover-cue pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#293241]/10 opacity-0 group-hover/image:animate-[fadeCue_1.5s_ease-in-out_forwards]"
       aria-hidden="true"
     >
       <span className="relative flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-full bg-[#F0F7FF]/95 text-[#293241] shadow-xl backdrop-blur-sm">
@@ -152,128 +198,175 @@ function ArtworkHoverCue() {
           />
         </svg>
         <span className="text-[9px] font-semibold tracking-[0.14em] uppercase">
-          View artwork
+          Click me!
         </span>
       </span>
     </span>
   )
 }
 
-function CarouselRow({
-  category,
-  rowIndex,
+function FeedCard({
+  painting,
+  liked,
   onSelect,
+  onLike,
 }: {
-  category: Category
-  rowIndex: number
+  painting: Painting
+  liked: boolean
   onSelect: (painting: Painting) => void
+  onLike: (painting: Painting) => void
 }) {
-  const categoryPaintings = paintings.filter(
-    (painting) => painting.category === category,
-  )
-  const repeatedPaintings = Array.from(
-    { length: Math.ceil(4 / categoryPaintings.length) },
-    () => categoryPaintings,
-  ).flat()
-  const movingPaintings = [...repeatedPaintings, ...repeatedPaintings]
+  const lastTapRef = useRef(0)
+  const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const burstTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [burstKey, setBurstKey] = useState(0)
+  // landscape/square art gets letterbox bars so the whole piece stays visible;
+  // portrait art fills the screen edge to edge (no bars)
+  const [fitMode, setFitMode] = useState<"cover" | "contain">("cover")
+
+  useEffect(() => {
+    return () => {
+      if (openTimerRef.current) clearTimeout(openTimerRef.current)
+      if (burstTimerRef.current) clearTimeout(burstTimerRef.current)
+    }
+  }, [])
+
+  const handleTap = () => {
+    const now = Date.now()
+
+    // second tap within 300ms = like, cancel the pending open
+    if (now - lastTapRef.current < 300) {
+      lastTapRef.current = 0
+
+      if (openTimerRef.current) clearTimeout(openTimerRef.current)
+
+      onLike(painting)
+      setBurstKey((key) => key + 1)
+
+      // hard guarantee: heart element is removed exactly 1s after the double-tap
+      if (burstTimerRef.current) clearTimeout(burstTimerRef.current)
+      burstTimerRef.current = setTimeout(() => setBurstKey(0), 1000)
+      return
+    }
+
+    lastTapRef.current = now
+    openTimerRef.current = setTimeout(() => onSelect(painting), 300)
+  }
 
   return (
-    <section
-      className="relative border-t border-[#293241]/15 py-8 hover:z-20 sm:py-10"
-      aria-labelledby={`carousel-${category.replaceAll(" ", "-").toLowerCase()}`}
-    >
-      <div className="mx-auto mb-6 flex max-w-[1440px] items-end justify-between px-5 sm:px-8 lg:px-12">
-        <div>
-          <p className="mb-2 text-[10px] font-semibold tracking-[0.22em] text-[#293241]/50 uppercase">
-            Row {String(rowIndex + 1).padStart(2, "0")}
-          </p>
-          <h2
-            id={`carousel-${category.replaceAll(" ", "-").toLowerCase()}`}
-            className="font-display text-3xl tracking-[-0.035em] sm:text-4xl"
-          >
-            {category}
-          </h2>
-        </div>
-        <p className="text-[10px] font-semibold tracking-[0.16em] text-[#293241]/50 uppercase">
-          {categoryPaintings.length}{" "}
-          {categoryPaintings.length === 1 ? "work" : "works"}
-        </p>
-      </div>
-
-      <div className="carousel-viewport overflow-visible">
-        <div
-          className={`carousel-track flex w-max gap-5 px-5 sm:gap-6 sm:px-8 lg:px-12 ${
-            rowIndex % 2 === 1 ? "carousel-track-reverse" : ""
+    <article className="relative h-[100dvh] snap-start snap-always touch-manipulation overflow-hidden bg-[#293241]">
+      <button
+        type="button"
+        onClick={handleTap}
+        className="group/image absolute inset-0 block w-full text-left"
+        aria-label={`Double-tap ${painting.name} to like, tap to open`}
+      >
+        <img
+          src={painting.image}
+          alt={painting.alt}
+          className={`h-full w-full ${
+            fitMode === "contain" ? "object-contain" : "object-cover"
           }`}
-        >
-          {movingPaintings.map((painting, index) => {
-            const isDuplicate = index >= categoryPaintings.length
-
-            return (
-              <article
-                key={`${category}-${painting.name}-${index}`}
-                className="group relative w-[72vw] max-w-[360px] shrink-0 hover:z-20 sm:w-[340px] lg:w-[380px]"
-                aria-hidden={isDuplicate ? "true" : undefined}
-              >
-                <button
-                  type="button"
-                  className="group/image relative block aspect-[4/5] w-full cursor-zoom-in overflow-visible bg-[#98C1D9]/25 text-left hover:z-10"
-                  onClick={() => onSelect(painting)}
-                  tabIndex={isDuplicate ? -1 : undefined}
-                  aria-label={`Open ${painting.name}`}
-                >
-                  <img
-                    src={painting.image}
-                    alt={isDuplicate ? "" : painting.alt}
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/image:scale-[1.3]"
-                    loading="lazy"
-                  />
-                  <span className="absolute top-4 right-4 rounded-full bg-[#F0F7FF]/90 px-3 py-2 text-[9px] font-semibold tracking-[0.14em] uppercase backdrop-blur-sm transition-opacity duration-200 group-hover/image:opacity-0">
-                    {category}
-                  </span>
-                  <ArtworkHoverCue />
-                </button>
-                <div className="flex items-center justify-between border-b border-[#293241]/20 py-4">
-                  <h3 className="font-display text-2xl tracking-[-0.025em]">
-                    {painting.name}
-                  </h3>
-                  <span
-                    className="h-2 w-2 shrink-0 rounded-full bg-[#98C1D9]"
-                    aria-hidden="true"
-                  />
-                </div>
-              </article>
+          loading="lazy"
+          onLoad={(event) => {
+            const img = event.currentTarget
+            setFitMode(
+              img.naturalWidth >= img.naturalHeight ? "contain" : "cover",
             )
-          })}
+          }}
+        />
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#293241]/85 via-[#293241]/30 to-transparent" />
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 px-5 pb-8">
+          <div className="min-w-0">
+            <h2 className="font-display text-3xl text-[#F0F7FF] drop-shadow-sm">
+              {painting.name}
+            </h2>
+            <p className="mt-1.5 text-[10px] font-semibold tracking-[0.18em] text-[#F0F7FF]/75 uppercase">
+              {painting.category}
+            </p>
+          </div>
+          <svg
+            viewBox="0 0 24 24"
+            className={`h-7 w-7 shrink-0 drop-shadow-md ${
+              liked ? "text-[#E63946]" : "text-[#F0F7FF]/40"
+            }`}
+            aria-hidden="true"
+          >
+            <path
+              d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 5.9l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.5l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"
+              fill={liked ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
-      </div>
-    </section>
+
+        <ArtworkHoverCue />
+
+        {burstKey > 0 && (
+          <span
+            key={burstKey}
+            className="heart-burst pointer-events-none absolute inset-0 z-20 grid place-items-center"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-40 w-40 drop-shadow-[0_8px_24px_rgba(41,50,65,0.45)]"
+            >
+              <path
+                d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 5.9l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.5l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"
+                fill="#F0F7FF"
+                stroke="#293241"
+                strokeWidth="1.2"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        )}
+      </button>
+    </article>
   )
 }
 
 function ArtworkModal({
   painting,
+
   liked,
+
   comments,
+
   onClose,
+
   onToggleLike,
+
   onAddComment,
 }: {
   painting: Painting
+
   liked: boolean
+
   comments: string[]
+
   onClose: () => void
+
   onToggleLike: () => void
+
   onAddComment: (comment: string) => void
 }) {
   const [comment, setComment] = useState("")
 
   const submitComment = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     const trimmedComment = comment.trim()
 
     if (!trimmedComment) return
+
     onAddComment(trimmedComment)
+
     setComment("")
   }
 
@@ -318,11 +411,7 @@ function ArtworkModal({
               className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#293241]/15 transition-colors hover:bg-[#98C1D9]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#293241]"
               aria-label="Close artwork"
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
                 <path
                   d="M6 6l12 12M18 6 6 18"
                   fill="none"
@@ -358,7 +447,9 @@ function ArtworkModal({
             ) : (
               <div className="flex h-full min-h-24 items-center justify-center text-center">
                 <div>
-                  <p className="font-display text-xl">Start the conversation.</p>
+                  <p className="font-display text-xl">
+                    Start the conversation.
+                  </p>
                   <p className="mt-1 text-xs text-[#293241]/55">
                     Share what this piece makes you feel.
                   </p>
@@ -372,15 +463,13 @@ function ArtworkModal({
               type="button"
               onClick={onToggleLike}
               className={`flex w-full items-center gap-3 px-5 py-4 text-left text-xs font-semibold tracking-[0.15em] uppercase transition-colors sm:px-6 ${
-                liked ? "text-[#293241]" : "text-[#293241]/65 hover:text-[#293241]"
+                liked
+                  ? "text-[#293241]"
+                  : "text-[#293241]/65 hover:text-[#293241]"
               }`}
               aria-pressed={liked}
             >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-6 w-6"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                 <path
                   d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 5.9l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.5l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8Z"
                   fill={liked ? "currentColor" : "none"}
@@ -423,16 +512,25 @@ function ArtworkModal({
 
 export default function App() {
   const [activeCategory, setActiveCategory] = useState<"All" | Category>("All")
-  const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null)
+
+  const [selectedPainting, setSelectedPainting] = useState<Painting | null>(
+    null,
+  )
+
   const [likedPaintings, setLikedPaintings] = useState<Set<string>>(new Set())
+
   const [comments, setComments] = useState<Record<string, string[]>>({})
 
+  const [spot, setSpot] = useState<[number, number] | null>(null)
+
   const [page, setPage] = useState<Page>(() => {
-    if (typeof window === "undefined") return "gallery"
-    if (window.location.hash === "#carousel") return "carousel"
-    if (window.location.hash === "#gallery-view") return "gallery-view"
-    return "gallery"
+    if (typeof window === "undefined") return "home"
+
+    if (window.location.hash === "#gallery") return "gallery"
+
+    return "home"
   })
+
   const visiblePaintings =
     activeCategory === "All"
       ? paintings
@@ -441,17 +539,18 @@ export default function App() {
   useEffect(() => {
     const syncPageWithHash = () => {
       const hash = window.location.hash
-      if (hash === "#carousel") {
-        setPage("carousel")
-      } else if (hash === "#gallery-view") {
-        setPage("gallery-view")
-      } else if (hash === "#top") {
+
+      if (hash === "#gallery") {
         setPage("gallery")
+      } else if (hash === "#top") {
+        setPage("home")
       }
+
       // other hashes (#contact) scroll without changing page
     }
 
     window.addEventListener("hashchange", syncPageWithHash)
+
     return () => window.removeEventListener("hashchange", syncPageWithHash)
   }, [])
 
@@ -459,29 +558,46 @@ export default function App() {
     if (!selectedPainting) return
 
     const previousOverflow = document.body.style.overflow
+
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSelectedPainting(null)
     }
 
     document.body.style.overflow = "hidden"
+
     window.addEventListener("keydown", closeOnEscape)
 
     return () => {
       document.body.style.overflow = previousOverflow
+
       window.removeEventListener("keydown", closeOnEscape)
     }
   }, [selectedPainting])
+
+  const likePainting = (painting: Painting) => {
+    setLikedPaintings((current) => {
+      if (current.has(painting.name)) return current
+
+      const next = new Set(current)
+
+      next.add(painting.name)
+
+      return next
+    })
+  }
 
   const toggleSelectedPaintingLike = () => {
     if (!selectedPainting) return
 
     setLikedPaintings((current) => {
       const next = new Set(current)
+
       if (next.has(selectedPainting.name)) {
         next.delete(selectedPainting.name)
       } else {
         next.add(selectedPainting.name)
       }
+
       return next
     })
   }
@@ -491,8 +607,10 @@ export default function App() {
 
     setComments((current) => ({
       ...current,
+
       [selectedPainting.name]: [
         ...(current[selectedPainting.name] ?? []),
+
         comment,
       ],
     }))
@@ -500,7 +618,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F0F7FF] text-[#293241]">
-      <header className="border-b border-[#293241]/15">
+      <header className="border-b border-[#F0F7FF]/15 bg-[#293241] text-[#F0F7FF]">
         <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-4 px-5 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-5 sm:px-8 lg:px-12">
           <a
             href="#top"
@@ -510,49 +628,40 @@ export default function App() {
             <img
               src="/nastias-gallery-logo.png"
               alt=""
-              className="m-0 h-20 w-auto max-w-[80vw] pt-4 object-contain object-center"
+              width={1067}
+              height={772}
+              className="m-0 h-32 w-auto max-w-[80vw] pt-4 object-contain object-center invert"
             />
           </a>
           <nav
-            className="flex w-full min-w-0 items-center justify-between gap-1 overflow-x-auto rounded-full border border-[#293241]/15 p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto sm:justify-start"
+            className="flex w-full min-w-0 items-center justify-between gap-1 overflow-x-auto rounded-full border border-[#F0F7FF]/15 p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto sm:justify-start"
             aria-label="Main"
           >
             <a
               href="#top"
               className={`shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-4 sm:text-[10px] ${
+                page === "home"
+                  ? "bg-[#F0F7FF] text-[#293241]"
+                  : "hover:bg-[#F0F7FF]/10"
+              }`}
+              aria-current={page === "home" ? "page" : undefined}
+            >
+              Home
+            </a>
+            <a
+              href="#gallery"
+              className={`shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-4 sm:text-[10px] ${
                 page === "gallery"
-                  ? "bg-[#293241] text-[#F0F7FF]"
-                  : "hover:bg-[#98C1D9]/25"
+                  ? "bg-[#F0F7FF] text-[#293241]"
+                  : "hover:bg-[#F0F7FF]/10"
               }`}
               aria-current={page === "gallery" ? "page" : undefined}
             >
               Gallery
             </a>
             <a
-              href="#carousel"
-              className={`shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-4 sm:text-[10px] ${
-                page === "carousel"
-                  ? "bg-[#293241] text-[#F0F7FF]"
-                  : "hover:bg-[#98C1D9]/25"
-              }`}
-              aria-current={page === "carousel" ? "page" : undefined}
-            >
-              Carousel
-            </a>
-            <a
-              href="#gallery-view"
-              className={`shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-4 sm:text-[10px] ${
-                page === "gallery-view"
-                  ? "bg-[#293241] text-[#F0F7FF]"
-                  : "hover:bg-[#98C1D9]/25"
-              }`}
-              aria-current={page === "gallery-view" ? "page" : undefined}
-            >
-              Carousel alternative
-            </a>
-            <a
               href="#contact"
-              className="shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap hover:bg-[#98C1D9]/25 sm:px-4 sm:text-[10px]"
+              className="shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap hover:bg-[#F0F7FF]/10 sm:px-4 sm:text-[10px]"
             >
               Contact us
             </a>
@@ -560,22 +669,66 @@ export default function App() {
         </div>
       </header>
 
-      {page === "gallery" ? (
+      {page === "home" ? (
         <main id="top">
-          <section className="mx-auto max-w-[1440px] px-5 pt-14 pb-12 sm:px-8 sm:pt-20 sm:pb-16 lg:px-12 lg:pt-24 lg:pb-20">
-            <div>
+          <section
+            className="relative hidden min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#F0F7FF] px-5 pt-14 pb-12 sm:flex sm:min-h-0 sm:px-8 sm:pt-20 sm:pb-16 lg:px-12 lg:pt-24 lg:pb-20"
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect()
+              setSpot([event.clientX - rect.left, event.clientY - rect.top])
+            }}
+            onMouseLeave={() => setSpot(null)}
+          >
+            {/* Base artwork — always visible */}
+            <img
+              src="/wide-painting-2-2047559910.jpg"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+
+            {/* Spotlight-revealed layer — the other 3 artworks, hidden by
+                default, revealed only inside a radial mask following the cursor */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-[5] grid grid-cols-3 transition-opacity duration-500"
+              style={{
+                opacity: spot ? 1 : 0,
+                maskImage: `radial-gradient(350px circle at ${spot?.[0] ?? 0}px ${spot?.[1] ?? 0}px, black 30%, transparent 100%)`,
+                WebkitMaskImage: `radial-gradient(350px circle at ${spot?.[0] ?? 0}px ${spot?.[1] ?? 0}px, black 30%, transparent 100%)`,
+              }}
+            >
+              <img
+                src="/images.jpg"
+                alt=""
+                className="h-full w-full object-cover"
+              />
+              <img
+                src="/oil-painting-OTZ1.webp"
+                alt=""
+                className="h-full w-full object-cover"
+              />
+              <img
+                src="/wall-art-print-canvas-poster-framed-australian-landscape-mountains-style-a-by-jessie-mitchelson-1.webp"
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            </div>
+
+            {/* Opaque card — sits above the spotlight, keeps heading legible */}
+            <div className="relative z-10 mx-auto w-full max-w-[600px] bg-[#293241] px-8 py-10 sm:px-12 sm:py-14 lg:px-16 rounded-4xl">
               <div className="lg:text-center">
-                <h1 className="font-display max-w-4xl text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em] lg:mx-auto">
+                <h1 className="font-display max-w-4xl text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em] text-[#F0F7FF] lg:mx-auto">
                   Nastiia's
                   <br />
                   <span className="italic text-[#98C1D9]">Gallery.</span>
                 </h1>
               </div>
-              <div className="mt-8 flex items-end justify-between border-t border-[#293241]/20 pt-4 lg:mx-auto lg:mt-12 lg:w-72 lg:flex-col lg:items-center lg:gap-3 lg:text-center">
-                <p className="max-w-48 text-sm leading-6 text-[#293241]/70 lg:max-w-none">
+              <div className="mt-8 flex items-end justify-between border-t border-[#F0F7FF]/20 pt-4 lg:mx-auto lg:mt-12 lg:w-72 lg:flex-col lg:items-center lg:gap-3 lg:text-center">
+                <p className="max-w-48 text-sm leading-6 text-[#F0F7FF]/70 lg:max-w-none">
                   works in colour, form, and feeling.
                 </p>
-                <span className="font-display text-3xl">09</span>
+                <span className="font-display text-3xl text-[#F0F7FF]">09</span>
               </div>
             </div>
           </section>
@@ -584,22 +737,56 @@ export default function App() {
             className="mx-auto max-w-[1440px] px-5 pb-20 sm:px-8 sm:pb-28 lg:px-12"
             aria-label="Painting collection"
           >
-            <FilterBar active={activeCategory} onChange={setActiveCategory} />
+            <h2 className="mb-6 font-display text-[clamp(2.5rem,7vw,4.5rem)] leading-[0.9] tracking-[-0.045em] sm:mb-8 pt-8">
+              My <span className="italic text-[#98C1D9]">Art library</span>
+            </h2>
+            <p className="mb-8 max-w-2xl text-sm leading-7 text-[#293241]/70 sm:text-base sm:leading-8">
+              Every canvas here is a quiet invitation — to pause, to feel, and
+              to find the piece that speaks the moment you see it. Stay a while;
+              the right work has a way of finding you.
+            </p>
 
-            <div className="grid grid-cols-1 gap-x-6 gap-y-12 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
+            <div className="sticky top-0 z-30 -mx-5 bg-[#F0F7FF] px-5 sm:static sm:z-auto sm:mx-0 sm:px-0">
+              <FilterBar active={activeCategory} onChange={setActiveCategory} />
+            </div>
+
+            <p className="mt-2 mb-2 text-center text-[11px] font-semibold tracking-[0.3em] text-[#293241]/55 uppercase sm:hidden">
+              Scroll ! ↓
+            </p>
+
+            <div className="h-[100dvh] snap-y snap-mandatory overflow-y-scroll [scrollbar-width:none] sm:hidden [&::-webkit-scrollbar]:hidden">
+              {visiblePaintings.map((painting) => (
+                <FeedCard
+                  key={painting.name}
+                  painting={painting}
+                  liked={likedPaintings.has(painting.name)}
+                  onSelect={setSelectedPainting}
+                  onLike={likePainting}
+                />
+              ))}
+            </div>
+
+            <div className="hidden sm:grid grid-cols-1 gap-x-6 gap-y-12 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
               {visiblePaintings.map((painting, index) => (
                 <article key={painting.name} className="group">
-                  <div className="relative aspect-[4/5] overflow-hidden bg-[#98C1D9]/25">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPainting(painting)}
+                    className="group/image relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden bg-[#98C1D9]/25 text-left hover:z-10"
+                    aria-label={`Open ${painting.name}`}
+                  >
                     <img
                       src={painting.image}
                       alt={painting.alt}
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/image:scale-[1.035]"
                       loading={index < 3 ? "eager" : "lazy"}
+                      fetchPriority={index === 0 ? "high" : undefined}
                     />
                     <span className="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full bg-[#F0F7FF]/90 text-[10px] font-semibold backdrop-blur-sm">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                  </div>
+                    <ArtworkHoverCue />
+                  </button>
                   <div className="mt-4 border-b border-[#293241]/20 pb-4">
                     <div className="flex items-baseline justify-between gap-4">
                       <h2 className="font-display text-2xl leading-tight tracking-[-0.02em] sm:text-[1.65rem]">
@@ -619,8 +806,8 @@ export default function App() {
             </div>
           </section>
         </main>
-      ) : page === "gallery-view" ? (
-        <main id="gallery-view">
+      ) : (
+        <main id="gallery">
           <section className="mx-auto max-w-[1440px] px-5 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-12 lg:px-12 lg:pt-24">
             <div className="lg:text-center">
               <p className="mb-5 flex items-center gap-3 text-[10px] font-semibold tracking-[0.24em] uppercase sm:text-xs lg:justify-center">
@@ -686,41 +873,6 @@ export default function App() {
             </div>
           </section>
         </main>
-      ) : (
-        <main id="carousel">
-          <section className="mx-auto max-w-[1440px] px-5 pt-14 pb-16 sm:px-8 sm:pt-20 sm:pb-20 lg:px-12 lg:pt-24 lg:pb-24">
-            <div className="grid gap-8 lg:grid-cols-[1fr_0.45fr] lg:items-end">
-              <div>
-                <p className="mb-5 flex items-center gap-3 text-[10px] font-semibold tracking-[0.24em] uppercase sm:text-xs">
-                  <span className="h-px w-8 bg-[#98C1D9]" />
-                  The moving collection
-                </p>
-                <h1 className="font-display max-w-4xl text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em]">
-                  Art in
-                  <br />
-                  <span className="italic text-[#98C1D9]">motion.</span>
-                </h1>
-              </div>
-              <div className="border-t border-[#293241]/20 pt-4 lg:mb-2">
-                <p className="max-w-sm text-sm leading-6 text-[#293241]/70">
-                  Every work, arranged by category and set in motion. Hover a
-                  row to pause and take a closer look.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <div className="pb-16 sm:pb-24">
-            {categories.map((category, index) => (
-              <CarouselRow
-                key={category}
-                category={category}
-                rowIndex={index}
-                onSelect={setSelectedPainting}
-              />
-            ))}
-          </div>
-        </main>
       )}
 
       {selectedPainting && (
@@ -751,7 +903,11 @@ export default function App() {
             </div>
           </div>
 
-          <form className="grid gap-6" aria-label="Contact Stillhouse Gallery">
+          <form
+            className="grid gap-6"
+            aria-label="Contact Stillhouse Gallery"
+            onSubmit={(event) => event.preventDefault()}
+          >
             <div className="grid gap-6 sm:grid-cols-2">
               <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] uppercase">
                 Name
