@@ -1,0 +1,26 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "url": "https://biannually-crepuscular-melony.ngrok-free.dev",
+      "settings": {
+        "extraHeaders": {
+          "ngrok-skip-browser-warning": "true"
+        }
+      },
+      "chromeFlags": "--no-sandbox --disable-setuid-sandbox",
+      "chromePath": "C:/Users/ahmad/.cache/puppeteer/chrome/win64-156.0.8078.47/chrome-win64/chrome.exe"
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.5 }],
+        "categories:accessibility": ["warn", { "minScore": 0.8 }],
+        "categories:best-practices": ["warn", { "minScore": 0.7 }],
+        "categories:seo": ["warn", { "minScore": 0.7 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

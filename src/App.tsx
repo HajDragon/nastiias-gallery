@@ -27,6 +27,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Red, blue, and yellow abstract painting",
+
+    description:
+      "A storm held mid-flash — reds and yellows torn across cobalt. Painted in one sitting while the sky outside turned the same bruised blue.",
   },
 
   {
@@ -38,6 +41,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1618331833071-ce81bd50d300?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Blue, white, and yellow abstract painting",
+
+    description:
+      "Near-white space with a single slow drift of color. The piece rewards standing still — the longer you look, the more the surface moves.",
   },
 
   {
@@ -49,6 +55,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Colorful geometric abstract painting",
+
+    description:
+      "Hard edges, warm colors — the way a childhood room comes back to you in blocks rather than details.",
   },
 
   {
@@ -60,6 +69,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1533208087231-c3618eab623c?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Pastel abstract painting",
+
+    description:
+      "Pastel planes that refuse to argue with each other. A gentle exercise in order: circles, drifts, and soft corners.",
   },
 
   {
@@ -71,6 +83,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1533157950006-c38844053d55?auto=format&fit=crop&w=1200&q=85",
 
     alt: "White and red abstract painting",
+
+    description:
+      "White ground, red gestures — a garden opening fast. Each mark made in a single stroke, no corrections allowed.",
   },
 
   {
@@ -82,6 +97,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1531489956451-20957fab52f2?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Deep blue abstract painting",
+
+    description:
+      "The twenty minutes after sunset when everything turns the same shade of blue. Thin layered washes until the surface holds light like water.",
   },
 
   {
@@ -93,6 +111,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1618331835717-801e976710b2?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Yellow, green, and white abstract painting",
+
+    description:
+      "Yellow, green, and white breaking through wet air. Mixed from memory of a morning walk the day after a storm.",
   },
 
   {
@@ -104,6 +125,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1586032788085-d75f745f26e0?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Red, blue, and white abstract painting",
+
+    description:
+      "Red and white pulled against blue — the moment a wave decides which way to go. Painted quickly, before the color could settle.",
   },
 
   {
@@ -115,6 +139,9 @@ const paintings = [
       "https://images.unsplash.com/photo-1531913764164-f85c52e6e654?auto=format&fit=crop&w=1200&q=85",
 
     alt: "Blue and red abstract painting",
+
+    description:
+      "Warm red sinking into deep blue — the final minutes of daylight held flat on canvas. Best viewed in low light.",
   },
 ]
 
@@ -380,7 +407,7 @@ function ArtworkModal({
       }}
     >
       <div
-        className="grid h-full w-full overflow-hidden bg-[#F0F7FF] shadow-2xl sm:h-auto sm:max-h-[88vh] sm:max-w-5xl sm:grid-cols-[1.15fr_0.85fr]"
+        className="grid h-full w-full grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-[#F0F7FF] shadow-2xl sm:h-auto sm:max-h-[88vh] sm:max-w-5xl sm:grid-cols-[1.2fr_0.8fr] sm:grid-rows-[minmax(0,1fr)]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="artwork-dialog-title"
@@ -394,18 +421,17 @@ function ArtworkModal({
         </div>
 
         <div className="flex min-h-0 flex-col">
-          <div className="flex items-start justify-between gap-4 border-b border-[#293241]/15 px-5 py-5 sm:px-6">
-            <div>
-              <p className="mb-1 text-[9px] font-semibold tracking-[0.18em] text-[#293241]/50 uppercase">
-                {painting.category}
-              </p>
-              <h2
-                id="artwork-dialog-title"
-                className="font-display text-2xl tracking-[-0.025em] sm:text-3xl"
-              >
-                {painting.name}
-              </h2>
-            </div>
+          <div className="flex items-center gap-3 border-b border-[#293241]/15 px-4 py-3 sm:px-5">
+            <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-[#293241]">
+              <img
+                src="/nastias-gallery-logo.png"
+                alt=""
+                className="h-5 w-auto object-contain invert"
+              />
+            </span>
+            <p className="min-w-0 flex-1 truncate text-sm font-semibold">
+              nastiia.gallery
+            </p>
             <button
               type="button"
               onClick={onClose}
@@ -424,51 +450,16 @@ function ArtworkModal({
             </button>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-6">
-            {comments.length > 0 ? (
-              <div className="space-y-5">
-                {comments.map((item, index) => (
-                  <div
-                    key={`${painting.name}-comment-${index}`}
-                    className="flex gap-3"
-                  >
-                    <span
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#98C1D9]/35 text-[10px] font-semibold"
-                      aria-hidden="true"
-                    >
-                      Y
-                    </span>
-                    <p className="pt-1 text-sm leading-6">
-                      <span className="mr-2 font-semibold">You</span>
-                      {item}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex h-full min-h-24 items-center justify-center text-center">
-                <div>
-                  <p className="font-display text-xl">
-                    Start the conversation.
-                  </p>
-                  <p className="mt-1 text-xs text-[#293241]/55">
-                    Share what this piece makes you feel.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="border-t border-[#293241]/15">
+          <div className="flex items-center gap-4 border-b border-[#293241]/15 px-4 py-3 sm:px-5">
             <button
               type="button"
               onClick={onToggleLike}
-              className={`flex w-full items-center gap-3 px-5 py-4 text-left text-xs font-semibold tracking-[0.15em] uppercase transition-colors sm:px-6 ${
+              aria-pressed={liked}
+              className={`flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase transition-colors ${
                 liked
-                  ? "text-[#293241]"
+                  ? "text-[#E63946]"
                   : "text-[#293241]/65 hover:text-[#293241]"
               }`}
-              aria-pressed={liked}
             >
               <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                 <path
@@ -479,32 +470,94 @@ function ArtworkModal({
                   strokeLinejoin="round"
                 />
               </svg>
-              {liked ? "Liked" : "Like this artwork"}
+              {liked ? "Liked" : "Like"}
             </button>
-
-            <form
-              className="flex items-center gap-3 border-t border-[#293241]/15 px-5 py-3 sm:px-6"
-              onSubmit={submitComment}
-            >
-              <label htmlFor="artwork-comment" className="sr-only">
-                Add a comment
-              </label>
-              <input
-                id="artwork-comment"
-                value={comment}
-                onChange={(event) => setComment(event.target.value)}
-                placeholder="Add a comment..."
-                className="min-w-0 flex-1 border-0 bg-transparent py-2 text-sm outline-none placeholder:text-[#293241]/40"
-              />
-              <button
-                type="submit"
-                disabled={!comment.trim()}
-                className="text-[10px] font-semibold tracking-[0.16em] uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
-              >
-                Post
-              </button>
-            </form>
           </div>
+
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5">
+            <div className="flex gap-3">
+              <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-full bg-[#293241]">
+                <img
+                  src="/nastias-gallery-logo.png"
+                  alt=""
+                  className="h-4 w-auto object-contain invert"
+                />
+              </span>
+              <div className="min-w-0">
+                <h2
+                  id="artwork-dialog-title"
+                  className="font-display text-xl leading-tight tracking-[-0.02em] sm:text-2xl"
+                >
+                  {painting.name}
+                </h2>
+                <p className="mt-1 text-[9px] font-semibold tracking-[0.18em] text-[#293241]/55 uppercase">
+                  {painting.category}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-[#293241]/85">
+                  <span className="mr-1.5 font-semibold text-[#293241]">
+                    nastiia.gallery
+                  </span>
+                  {painting.description}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 border-t border-[#293241]/15 pt-5">
+              {comments.length > 0 ? (
+                <div className="space-y-5">
+                  {comments.map((item, index) => (
+                    <div
+                      key={`${painting.name}-comment-${index}`}
+                      className="flex gap-3"
+                    >
+                      <span
+                        className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#98C1D9]/35 text-[10px] font-semibold"
+                        aria-hidden="true"
+                      >
+                        Y
+                      </span>
+                      <p className="pt-1 text-sm leading-6">
+                        <span className="mr-2 font-semibold">You</span>
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-3 text-center">
+                  <p className="font-display text-lg">
+                    Start the conversation.
+                  </p>
+                  <p className="mt-1 text-xs text-[#293241]/55">
+                    Share what this piece makes you feel.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <form
+            className="flex items-center gap-3 border-t border-[#293241]/15 px-4 py-3 sm:px-5"
+            onSubmit={submitComment}
+          >
+            <label htmlFor="artwork-comment" className="sr-only">
+              Add a comment
+            </label>
+            <input
+              id="artwork-comment"
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+              placeholder="Add a comment..."
+              className="min-w-0 flex-1 border-0 bg-transparent py-2 text-sm outline-none placeholder:text-[#293241]/40"
+            />
+            <button
+              type="submit"
+              disabled={!comment.trim()}
+              className="text-[10px] font-semibold tracking-[0.16em] uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+            >
+              Post
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -618,10 +671,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#F0F7FF] text-[#293241]">
       <header className="border-b border-[#F0F7FF]/15 bg-[#293241] text-[#F0F7FF]">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-4 px-5 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-4 px-5 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8 lg:px-12">
           <a
             href="#top"
-            className="flex w-full justify-center"
+            className="flex shrink-0 justify-center"
             aria-label="Nastiia's Gallery home"
           >
             <img
@@ -629,16 +682,16 @@ export default function App() {
               alt=""
               width={1067}
               height={772}
-              className="m-0 h-32 w-auto max-w-[80vw] pt-4 object-contain object-center invert"
+              className="m-0 h-16 w-auto max-w-[60vw] object-contain object-center invert sm:h-20"
             />
           </a>
           <nav
-            className="flex w-full min-w-0 items-center justify-between gap-1 overflow-x-auto rounded-full border border-[#F0F7FF]/15 p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto sm:justify-start"
+            className="flex w-full min-w-0 items-center justify-between gap-1 overflow-x-auto rounded-full border border-[#F0F7FF]/15 p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto sm:justify-start sm:gap-2"
             aria-label="Main"
           >
             <a
               href="#top"
-              className={`shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-4 sm:text-[10px] ${
+              className={`shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${
                 page === "home"
                   ? "bg-[#F0F7FF] text-[#293241]"
                   : "hover:bg-[#F0F7FF]/10"
@@ -649,7 +702,7 @@ export default function App() {
             </a>
             <a
               href="#gallery"
-              className={`shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-4 sm:text-[10px] ${
+              className={`shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${
                 page === "gallery"
                   ? "bg-[#F0F7FF] text-[#293241]"
                   : "hover:bg-[#F0F7FF]/10"
@@ -660,7 +713,7 @@ export default function App() {
             </a>
             <a
               href="#contact"
-              className="shrink-0 rounded-full px-2.5 py-2 text-[8px] font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap hover:bg-[#F0F7FF]/10 sm:px-4 sm:text-[10px]"
+              className="shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap hover:bg-[#F0F7FF]/10 sm:px-5 sm:py-2.5 sm:text-sm"
             >
               Contact us
             </a>
@@ -865,7 +918,7 @@ export default function App() {
                   autoComplete="name"
                   required
                   placeholder="Your name"
-                  className="border-0 border-b border-[#F0F7FF]/30 bg-transparent px-0 py-3 text-base tracking-normal text-[#F0F7FF] normal-case outline-none transition-colors placeholder:text-[#F0F7FF]/35 focus:border-[#98C1D9]"
+                  className="rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-[#98C1D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#98C1D9]"
                 />
               </label>
               <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] uppercase">
@@ -876,7 +929,7 @@ export default function App() {
                   autoComplete="email"
                   required
                   placeholder="you@example.com"
-                  className="border-0 border-b border-[#F0F7FF]/30 bg-transparent px-0 py-3 text-base tracking-normal text-[#F0F7FF] normal-case outline-none transition-colors placeholder:text-[#F0F7FF]/35 focus:border-[#98C1D9]"
+                  className="rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-[#98C1D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#98C1D9]"
                 />
               </label>
             </div>
@@ -887,8 +940,25 @@ export default function App() {
                 required
                 rows={4}
                 placeholder="Tell us how we can help"
-                className="resize-none border-0 border-b border-[#F0F7FF]/30 bg-transparent px-0 py-3 text-base leading-6 tracking-normal text-[#F0F7FF] normal-case outline-none transition-colors placeholder:text-[#F0F7FF]/35 focus:border-[#98C1D9]"
+                className="resize-none rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base leading-6 tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-[#98C1D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#98C1D9]"
               />
+            </label>
+            <label className="flex items-start gap-3 text-xs leading-5 text-[#F0F7FF]/75">
+              <input
+                type="checkbox"
+                name="privacy-consent"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-[#98C1D9]"
+              />
+              <span>
+                I agree to the{" "}
+                <a
+                  href="#privacy"
+                  className="underline decoration-[#98C1D9] underline-offset-2 hover:text-[#F0F7FF]"
+                >
+                  privacy policy
+                </a>
+                . (Placeholder)
+              </span>
             </label>
             <button
               type="submit"
