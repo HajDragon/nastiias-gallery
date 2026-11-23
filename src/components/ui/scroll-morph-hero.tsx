@@ -382,7 +382,7 @@ export default function IntroAnimation({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full bg-[#F0F7FF] overflow-hidden"
+      className="relative w-full h-full bg-background overflow-hidden"
       onClick={advanceStage}
     >
       {}
@@ -444,7 +444,7 @@ export default function IntroAnimation({
           style={{ opacity: contentOpacity, y: contentY }}
           className="absolute top-[10%] z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4"
         >
-          <h2 className="text-3xl md:text-5xl font-semibold text-gray-900 tracking-tight mb-4">
+          <h2 className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-white tracking-tight mb-4">
             The Collection
           </h2>
           <p className="text-sm md:text-base text-gray-600 max-w-lg leading-relaxed">

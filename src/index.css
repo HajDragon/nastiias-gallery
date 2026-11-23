@@ -42,15 +42,121 @@
   font-display: swap;
 }
 
-@theme {
-  --font-sans: "Libron", serif;
-  --font-display: "Magilio", serif;
+/* Design palette — ported from the reference project's app.css. Semantic
+   tokens are declared as plain custom properties and mapped into @theme inline
+   with var(), so .dark flips them at the element instead of baking light
+   values into the generated utilities. */
+:root {
+  --main-canvas: #eef3fb;
+  --main-surface: #ffffff;
+  --main-ink: #1e2533;
+  --main-muted: #4c5a70;
+  --main-blue: #2563eb;
+  --main-on-blue: #ffffff;
+  --main-line: #ccd8ec;
+  --main-chip: #dce8fb;
+  --main-red: #c0392b;
+
+  --background: #eef3fb;
+  --foreground: #293241;
+  --card: #ffffff;
+  --card-foreground: #293241;
+  --popover: #ffffff;
+  --popover-foreground: #293241;
+  --primary: #293241;
+  --primary-foreground: #f0f7ff;
+  --secondary: #eef3fb;
+  --secondary-foreground: #293241;
+  --muted: #eef3fb;
+  --muted-foreground: #4c5a70;
+  --accent: #dce8fb;
+  --accent-foreground: #293241;
+  --destructive: #c0392b;
+  --destructive-foreground: #ffffff;
+  --border: #ccd8ec;
+  --input: #ccd8ec;
+  --ring: #2563eb;
+  --header: #293241;
+  --header-foreground: #f0f7ff;
+  color-scheme: light;
 }
 
-:root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+.dark {
+  --main-canvas: #1f1a1a;
+  --main-surface: #2a2626;
+  --main-ink: #e9eefb;
+  --main-muted: #aab8d2;
+  --main-blue: #a8c7e0;
+  --main-on-blue: #101828;
+  --main-line: #3a3535;
+  --main-chip: #332e2e;
+
+  --background: #121212;
+  --foreground: #e9eefb;
+  --card: #1e1e1e;
+  --card-foreground: #e9eefb;
+  --popover: #1e1e1e;
+  --popover-foreground: #e9eefb;
+  --primary: #e9eefb;
+  --primary-foreground: #1f1a1a;
+  --secondary: #2a2626;
+  --secondary-foreground: #e9eefb;
+  --muted: #2a2626;
+  --muted-foreground: #aab8d2;
+  --accent: #332e2e;
+  --accent-foreground: #ccd8ec;
+  --border: #ccd8ec;
+  --input: #3d3d3d;
+  --ring: #a8c7e0;
+  color-scheme: dark;
 }
+
+@theme {
+  --font-sans: "Libron", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-display: "Magilio", Georgia, serif;
+}
+
+@theme inline {
+  --color-main-canvas: var(--main-canvas);
+  --color-main-surface: var(--main-surface);
+  --color-main-ink: var(--main-ink);
+  --color-main-muted: var(--main-muted);
+  --color-main-blue: var(--main-blue);
+  --color-main-on-blue: var(--main-on-blue);
+  --color-main-line: var(--main-line);
+  --color-main-chip: var(--main-chip);
+  --color-main-red: var(--main-red);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-primary-blue: var(--main-blue);
+  --color-primary-on-blue: var(--main-on-blue);
+
+  /* The header intentionally stays navy in both themes. */
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
+}
+
+/* Class-based dark mode, as used by the reference project. */
+@variant dark (&:where(.dark, .dark *));
 
 html {
   scroll-behavior: smooth;
@@ -59,7 +165,7 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  background: #f0f7ff;
+  background: var(--background);
   font-family: "Libron", serif;
 }
 

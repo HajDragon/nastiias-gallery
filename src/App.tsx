@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import Header from "./components/Header"
 import IntroAnimation from "./components/ui/scroll-morph-hero"
 
 const categories = [
@@ -171,7 +172,7 @@ function FilterBar({
   onChange: (category: "All" | Category) => void
 }) {
   return (
-    <div className="mb-10 border-y border-[#293241]/15 py-3 sm:mb-12">
+    <div className="mb-10 border-y border-border/15 py-3 sm:mb-12">
       <div
         className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0 [&::-webkit-scrollbar]:hidden"
         role="group"
@@ -187,8 +188,8 @@ function FilterBar({
               onClick={() => onChange(category)}
               className={`shrink-0 rounded-full border px-4 py-2 text-[10px] font-semibold tracking-[0.15em] uppercase transition-colors sm:text-[11px] ${
                 isActive
-                  ? "border-[#293241] bg-[#293241] text-[#F0F7FF]"
-                  : "border-[#293241]/20 text-[#293241] hover:border-[#98C1D9] hover:bg-[#98C1D9]/20"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border/20 text-foreground hover:border-primary-blue hover:bg-accent"
               }`}
               aria-pressed={isActive}
             >
@@ -207,7 +208,7 @@ function ArtworkHoverCue() {
       className="artwork-hover-cue pointer-events-none absolute inset-0 z-10 grid place-items-center bg-[#293241]/10 opacity-0 group-hover/image:animate-[fadeCue_1.5s_ease-in-out_forwards]"
       aria-hidden="true"
     >
-      <span className="relative flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-full bg-[#F0F7FF]/95 text-[#293241] shadow-xl backdrop-blur-sm">
+      <span className="relative flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-full bg-card/95 text-foreground shadow-xl backdrop-blur-sm">
         <span className="artwork-click-ring absolute inset-0 rounded-full border border-[#F0F7FF]" />
         <svg viewBox="0 0 24 24" className="h-5 w-5">
           <path
@@ -282,27 +283,21 @@ function FeedCard({
   }
 
   return (
-    <article className="relative h-[100dvh] snap-start snap-always touch-manipulation overflow-hidden bg-[#293241]">
+    <article className="relative h-[100dvh] snap-start snap-always touch-manipulation overflow-hidden bg-card">
       <button
         type="button"
         onClick={handleTap}
         className="group/image absolute inset-0 block w-full text-left"
         aria-label={`Double-tap ${painting.name} to like, tap to open`}
       >
-        <img
-          src={painting.image}
-          alt={painting.alt}
-          className={`h-full w-full ${
-            fitMode === "contain" ? "object-contain" : "object-cover"
-          }`}
-          loading="lazy"
-          onLoad={(event) => {
-            const img = event.currentTarget
-            setFitMode(
-              img.naturalWidth >= img.naturalHeight ? "contain" : "cover",
-            )
-          }}
-        />
+        <div className="h-full w-full bg-card">
+          <img
+            src={painting.image}
+            alt={painting.alt}
+            className="h-full w-full object-contain rounded-lg"
+            loading="lazy"
+          />
+        </div>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#293241]/85 via-[#293241]/30 to-transparent" />
 
@@ -318,7 +313,7 @@ function FeedCard({
           <svg
             viewBox="0 0 24 24"
             className={`h-7 w-7 shrink-0 drop-shadow-md ${
-              liked ? "text-[#E63946]" : "text-[#F0F7FF]/40"
+              liked ? "text-destructive" : "text-[#F0F7FF]/40"
             }`}
             aria-hidden="true"
           >
@@ -407,7 +402,7 @@ function ArtworkModal({
       }}
     >
       <div
-        className="grid h-full w-full grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-[#F0F7FF] shadow-2xl sm:h-auto sm:max-h-[88vh] sm:max-w-5xl sm:grid-cols-[1.2fr_0.8fr] sm:grid-rows-[minmax(0,1fr)]"
+        className="grid h-full w-full grid-rows-[auto_minmax(0,1fr)] overflow-hidden bg-card shadow-2xl sm:h-auto sm:max-h-[88vh] sm:max-w-5xl sm:grid-cols-[1.2fr_0.8fr] sm:grid-rows-[minmax(0,1fr)]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="artwork-dialog-title"
@@ -421,7 +416,7 @@ function ArtworkModal({
         </div>
 
         <div className="flex min-h-0 flex-col">
-          <div className="flex items-center gap-3 border-b border-[#293241]/15 px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-3 border-b border-border/15 px-4 py-3 sm:px-5">
             <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-[#293241]">
               <img
                 src="/nastias-gallery-logo.png"
@@ -435,7 +430,7 @@ function ArtworkModal({
             <button
               type="button"
               onClick={onClose}
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#293241]/15 transition-colors hover:bg-[#98C1D9]/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#293241]"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border/15 transition-colors hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               aria-label="Close artwork"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
@@ -450,15 +445,13 @@ function ArtworkModal({
             </button>
           </div>
 
-          <div className="flex items-center gap-4 border-b border-[#293241]/15 px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-4 border-b border-border/15 px-4 py-3 sm:px-5">
             <button
               type="button"
               onClick={onToggleLike}
               aria-pressed={liked}
               className={`flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase transition-colors ${
-                liked
-                  ? "text-[#E63946]"
-                  : "text-[#293241]/65 hover:text-[#293241]"
+                liked ? "text-destructive" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
@@ -490,11 +483,11 @@ function ArtworkModal({
                 >
                   {painting.name}
                 </h2>
-                <p className="mt-1 text-[9px] font-semibold tracking-[0.18em] text-[#293241]/55 uppercase">
+                <p className="mt-1 text-[9px] font-semibold tracking-[0.18em] text-muted-foreground uppercase">
                   {painting.category}
                 </p>
-                <p className="mt-3 text-sm leading-6 text-[#293241]/85">
-                  <span className="mr-1.5 font-semibold text-[#293241]">
+                <p className="mt-3 text-sm leading-6 text-foreground/85">
+                  <span className="mr-1.5 font-semibold text-foreground">
                     nastiia.gallery
                   </span>
                   {painting.description}
@@ -502,7 +495,7 @@ function ArtworkModal({
               </div>
             </div>
 
-            <div className="mt-5 border-t border-[#293241]/15 pt-5">
+            <div className="mt-5 border-t border-border/15 pt-5">
               {comments.length > 0 ? (
                 <div className="space-y-5">
                   {comments.map((item, index) => (
@@ -511,7 +504,7 @@ function ArtworkModal({
                       className="flex gap-3"
                     >
                       <span
-                        className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#98C1D9]/35 text-[10px] font-semibold"
+                        className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent text-[10px] font-semibold text-accent-foreground"
                         aria-hidden="true"
                       >
                         Y
@@ -528,7 +521,7 @@ function ArtworkModal({
                   <p className="font-display text-lg">
                     Start the conversation.
                   </p>
-                  <p className="mt-1 text-xs text-[#293241]/55">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     Share what this piece makes you feel.
                   </p>
                 </div>
@@ -537,7 +530,7 @@ function ArtworkModal({
           </div>
 
           <form
-            className="flex items-center gap-3 border-t border-[#293241]/15 px-4 py-3 sm:px-5"
+            className="flex items-center gap-3 border-t border-border/15 px-4 py-3 sm:px-5"
             onSubmit={submitComment}
           >
             <label htmlFor="artwork-comment" className="sr-only">
@@ -548,7 +541,7 @@ function ArtworkModal({
               value={comment}
               onChange={(event) => setComment(event.target.value)}
               placeholder="Add a comment..."
-              className="min-w-0 flex-1 border-0 bg-transparent py-2 text-sm outline-none placeholder:text-[#293241]/40"
+              className="min-w-0 flex-1 border-0 bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground/60"
             />
             <button
               type="submit"
@@ -669,57 +662,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F7FF] text-[#293241]">
-      <header className="border-b border-[#F0F7FF]/15 bg-[#293241] text-[#F0F7FF]">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-4 px-5 pt-[calc(env(safe-area-inset-top)+1.5rem)] pb-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8 lg:px-12">
-          <a
-            href="#top"
-            className="flex shrink-0 justify-center"
-            aria-label="Nastiia's Gallery home"
-          >
-            <img
-              src="/nastias-gallery-logo.png"
-              alt=""
-              width={1067}
-              height={772}
-              className="m-0 h-16 w-auto max-w-[60vw] object-contain object-center invert sm:h-20"
-            />
-          </a>
-          <nav
-            className="flex w-full min-w-0 items-center justify-between gap-1 overflow-x-auto rounded-full border border-[#F0F7FF]/15 p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:w-auto sm:justify-start sm:gap-2"
-            aria-label="Main"
-          >
-            <a
-              href="#top"
-              className={`shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${
-                page === "home"
-                  ? "bg-[#F0F7FF] text-[#293241]"
-                  : "hover:bg-[#F0F7FF]/10"
-              }`}
-              aria-current={page === "home" ? "page" : undefined}
-            >
-              Home
-            </a>
-            <a
-              href="#gallery"
-              className={`shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap sm:px-5 sm:py-2.5 sm:text-sm ${
-                page === "gallery"
-                  ? "bg-[#F0F7FF] text-[#293241]"
-                  : "hover:bg-[#F0F7FF]/10"
-              }`}
-              aria-current={page === "gallery" ? "page" : undefined}
-            >
-              Gallery
-            </a>
-            <a
-              href="#contact"
-              className="shrink-0 rounded-full px-3 py-2 text-xs font-semibold tracking-[0.14em] uppercase transition-colors whitespace-nowrap hover:bg-[#F0F7FF]/10 sm:px-5 sm:py-2.5 sm:text-sm"
-            >
-              Contact us
-            </a>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background text-foreground">
+      <Header page={page} />
 
       {page === "home" ? (
         <main id="top">
@@ -739,19 +683,19 @@ export default function App() {
             aria-label="Painting collection"
           >
             <h2 className="mb-6 font-display text-[clamp(2.5rem,7vw,4.5rem)] leading-[0.9] tracking-[-0.045em] sm:mb-8 pt-8">
-              My <span className="italic text-[#98C1D9]">Art library</span>
+              My <span className="italic text-primary-blue">Art library</span>
             </h2>
-            <p className="mb-8 max-w-2xl text-sm leading-7 text-[#293241]/70 sm:text-base sm:leading-8">
+            <p className="mb-8 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
               Every canvas here is a quiet invitation — to pause, to feel, and
               to find the piece that speaks the moment you see it. Stay a while;
               the right work has a way of finding you.
             </p>
 
-            <div className="sticky top-0 z-30 -mx-5 bg-[#F0F7FF] px-5 sm:static sm:z-auto sm:mx-0 sm:px-0">
+            <div className="sticky top-0 z-30 -mx-5 bg-background px-5 sm:static sm:z-auto sm:mx-0 sm:px-0">
               <FilterBar active={activeCategory} onChange={setActiveCategory} />
             </div>
 
-            <p className="mt-2 mb-2 text-center text-[11px] font-semibold tracking-[0.3em] text-[#293241]/55 uppercase sm:hidden">
+            <p className="mt-2 mb-2 text-center text-[11px] font-semibold tracking-[0.3em] text-muted-foreground uppercase sm:hidden">
               Scroll ! ↓
             </p>
 
@@ -769,36 +713,38 @@ export default function App() {
 
             <div className="hidden sm:grid grid-cols-1 gap-x-6 gap-y-12 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-16">
               {visiblePaintings.map((painting, index) => (
-                <article key={painting.name} className="group">
+                <article key={painting.name} className="group bg-card">
                   <button
                     type="button"
                     onClick={() => setSelectedPainting(painting)}
-                    className="group/image relative block aspect-[4/5] w-full cursor-zoom-in overflow-hidden bg-[#98C1D9]/25 text-left hover:z-10"
+                    className="group/image relative block w-full cursor-zoom-in overflow-hidden text-left hover:z-10"
                     aria-label={`Open ${painting.name}`}
                   >
-                    <img
-                      src={painting.image}
-                      alt={painting.alt}
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/image:scale-[1.035]"
-                      loading={index < 3 ? "eager" : "lazy"}
-                      fetchPriority={index === 0 ? "high" : undefined}
-                    />
-                    <span className="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full bg-[#F0F7FF]/90 text-[10px] font-semibold backdrop-blur-sm">
+                    <div className="aspect-[4/5] w-full bg-card">
+                      <img
+                        src={painting.image}
+                        alt={painting.alt}
+                        className="h-full w-full object-contain rounded-lg transition-transform duration-700 ease-out group-hover/image:scale-[1.035]"
+                        loading={index < 3 ? "eager" : "lazy"}
+                        fetchPriority={index === 0 ? "high" : undefined}
+                      />
+                    </div>
+                    <span className="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full bg-[#EEF3F8]/90 text-[10px] font-semibold backdrop-blur-sm">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <ArtworkHoverCue />
                   </button>
-                  <div className="mt-4 border-b border-[#293241]/20 pb-4">
+                  <div className="p-4 border-t border-border/15">
                     <div className="flex items-baseline justify-between gap-4">
-                      <h2 className="font-display text-2xl leading-tight tracking-[-0.02em] sm:text-[1.65rem]">
+                      <h2 className="font-display text-xl leading-tight tracking-[-0.02em] sm:text-[1.5rem]">
                         {painting.name}
                       </h2>
                       <span
-                        className="h-2 w-2 shrink-0 rounded-full bg-[#98C1D9] transition-transform duration-300 group-hover:scale-150"
+                        className="h-2 w-2 shrink-0 rounded-full bg-primary-blue transition-transform duration-300 group-hover:scale-150"
                         aria-hidden="true"
                       />
                     </div>
-                    <p className="mt-2 text-[10px] font-semibold tracking-[0.18em] text-[#293241]/55 uppercase">
+                    <p className="mt-1.5 text-[10px] font-semibold tracking-[0.18em] text-muted-foreground uppercase">
                       {painting.category}
                     </p>
                   </div>
@@ -812,16 +758,16 @@ export default function App() {
           <section className="mx-auto max-w-[1440px] px-5 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-12 lg:px-12 lg:pt-24">
             <div className="lg:text-center">
               <p className="mb-5 flex items-center gap-3 text-[10px] font-semibold tracking-[0.24em] uppercase sm:text-xs lg:justify-center">
-                <span className="h-px w-8 bg-[#98C1D9]" />
+                <span className="h-px w-8 bg-primary-blue" />
                 The dense hang
               </p>
               <h1 className="font-display max-w-4xl text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em] lg:mx-auto">
                 Wall to
                 <br />
-                <span className="italic text-[#98C1D9]">wall.</span>
+                <span className="italic text-primary-blue">wall.</span>
               </h1>
-              <div className="mt-8 flex items-end justify-between border-t border-[#293241]/20 pt-4 lg:mx-auto lg:mt-12 lg:w-72 lg:flex-col lg:items-center lg:gap-3 lg:text-center">
-                <p className="max-w-48 text-sm leading-6 text-[#293241]/70 lg:max-w-none">
+              <div className="mt-8 flex items-end justify-between border-t border-border/20 pt-4 lg:mx-auto lg:mt-12 lg:w-72 lg:flex-col lg:items-center lg:gap-3 lg:text-center">
+                <p className="max-w-48 text-sm leading-6 text-muted-foreground lg:max-w-none">
                   Two columns on mobile, six on desktop — every work in one
                   frame.
                 </p>
@@ -839,36 +785,38 @@ export default function App() {
               {visiblePaintings.map((painting, index) => (
                 <article
                   key={painting.name}
-                  className="group relative mb-4 break-inside-avoid hover:z-20 sm:mb-5 lg:mb-6"
+                  className="group bg-card break-inside-avoid hover:z-20"
                 >
                   <button
                     type="button"
                     onClick={() => setSelectedPainting(painting)}
-                    className={`group/image relative block w-full cursor-zoom-in overflow-visible bg-[#98C1D9]/25 hover:z-10 ${
-                      masonryAspects[index % masonryAspects.length]
-                    }`}
+                    className="group/image relative block w-full cursor-zoom-in overflow-hidden hover:z-10"
                     aria-label={`Open ${painting.name}`}
                   >
-                    <img
-                      src={painting.image}
-                      alt={painting.alt}
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/image:scale-[1.3]"
-                      loading="lazy"
-                    />
+                    <div className={`bg-card ${masonryAspects[index % masonryAspects.length]}`}>
+                      <img
+                        src={painting.image}
+                        alt={painting.alt}
+                        className="h-full w-full object-contain rounded-lg transition-transform duration-700 ease-out group-hover/image:scale-[1.3]"
+                        loading="lazy"
+                      />
+                    </div>
                     <ArtworkHoverCue />
                   </button>
-                  <div className="flex items-center justify-between gap-2 border-b border-[#293241]/20 py-3">
-                    <h2 className="font-display text-base leading-tight tracking-[-0.02em] sm:text-lg">
-                      {painting.name}
-                    </h2>
-                    <span
-                      className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#98C1D9] transition-transform duration-300 group-hover:scale-150"
-                      aria-hidden="true"
-                    />
+                  <div className="p-4 border-t border-border/15">
+                    <div className="flex items-center justify-between gap-2">
+                      <h2 className="font-display text-base leading-tight tracking-[-0.02em] sm:text-lg">
+                        {painting.name}
+                      </h2>
+                      <span
+                        className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-blue transition-transform duration-300 group-hover:scale-150"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <p className="mt-1.5 text-[9px] font-semibold tracking-[0.18em] text-muted-foreground uppercase">
+                      {painting.category}
+                    </p>
                   </div>
-                  <p className="mt-1.5 text-[9px] font-semibold tracking-[0.18em] text-[#293241]/55 uppercase">
-                    {painting.category}
-                  </p>
                 </article>
               ))}
             </div>
@@ -887,17 +835,20 @@ export default function App() {
         />
       )}
 
-      <footer id="contact" className="bg-[#293241] text-[#F0F7FF]">
+      <footer
+        id="contact"
+        className="border-t border-transparent bg-header text-header-foreground dark:border-border dark:bg-card dark:text-card-foreground"
+      >
         <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:px-12 lg:py-20">
           <div className="flex flex-col justify-between gap-10">
             <div>
-              <p className="mb-4 text-[10px] font-semibold tracking-[0.22em] text-[#98C1D9] uppercase">
+              <p className="mb-4 text-[10px] font-semibold tracking-[0.22em] text-primary-blue uppercase">
                 Contact us
               </p>
               <h2 className="font-display max-w-md text-4xl leading-[0.95] tracking-[-0.04em] sm:text-5xl lg:text-6xl">
                 Let&apos;s talk about art.
               </h2>
-              <p className="mt-5 max-w-sm text-sm leading-6 text-[#F0F7FF]/65">
+              <p className="mt-5 max-w-sm text-sm leading-6 text-[#F0F7FF]/65 dark:text-muted-foreground">
                 Questions about a work, an artist, or a future visit? Send us a
                 note and we&apos;ll be in touch.
               </p>
@@ -906,11 +857,11 @@ export default function App() {
 
           <form
             className="grid gap-6"
-            aria-label="Contact Stillhouse Gallery"
+            aria-label="Contact Nastiia's Gallery"
             onSubmit={(event) => event.preventDefault()}
           >
             <div className="grid gap-6 sm:grid-cols-2">
-              <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] uppercase">
+              <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] text-[#F0F7FF] uppercase dark:text-card-foreground">
                 Name
                 <input
                   type="text"
@@ -918,10 +869,10 @@ export default function App() {
                   autoComplete="name"
                   required
                   placeholder="Your name"
-                  className="rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-[#98C1D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#98C1D9]"
+                  className="rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-primary-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-blue dark:border-border dark:bg-background dark:text-foreground dark:placeholder:text-muted-foreground/60"
                 />
               </label>
-              <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] uppercase">
+              <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] text-[#F0F7FF] uppercase dark:text-card-foreground">
                 Email
                 <input
                   type="email"
@@ -929,31 +880,31 @@ export default function App() {
                   autoComplete="email"
                   required
                   placeholder="you@example.com"
-                  className="rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-[#98C1D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#98C1D9]"
+                  className="rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-primary-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-blue dark:border-border dark:bg-background dark:text-foreground dark:placeholder:text-muted-foreground/60"
                 />
               </label>
             </div>
-            <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] uppercase">
+            <label className="grid gap-2 text-[10px] font-semibold tracking-[0.18em] text-[#F0F7FF] uppercase dark:text-card-foreground">
               Message
               <textarea
                 name="message"
                 required
                 rows={4}
                 placeholder="Tell us how we can help"
-                className="resize-none rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base leading-6 tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-[#98C1D9] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#98C1D9]"
+                className="resize-none rounded-lg border border-[#F0F7FF]/20 bg-white px-4 py-3 text-base leading-6 tracking-normal text-[#293241] normal-case outline-none transition-colors placeholder:text-[#293241]/40 focus:border-primary-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-blue dark:border-border dark:bg-background dark:text-foreground dark:placeholder:text-muted-foreground/60"
               />
             </label>
-            <label className="flex items-start gap-3 text-xs leading-5 text-[#F0F7FF]/75">
+            <label className="flex items-start gap-3 text-xs leading-5 text-[#F0F7FF]/75 dark:text-muted-foreground">
               <input
                 type="checkbox"
                 name="privacy-consent"
-                className="mt-0.5 h-4 w-4 shrink-0 accent-[#98C1D9]"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-primary-blue"
               />
               <span>
                 I agree to the{" "}
                 <a
                   href="#privacy"
-                  className="underline decoration-[#98C1D9] underline-offset-2 hover:text-[#F0F7FF]"
+                  className="underline decoration-primary-blue underline-offset-2 hover:text-[#F0F7FF] dark:hover:text-foreground"
                 >
                   privacy policy
                 </a>
@@ -962,7 +913,7 @@ export default function App() {
             </label>
             <button
               type="submit"
-              className="mt-2 flex w-full items-center justify-between rounded-full bg-[#98C1D9] px-6 py-4 text-xs font-semibold tracking-[0.18em] text-[#293241] uppercase transition-colors hover:bg-[#F0F7FF] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#98C1D9] sm:w-auto sm:min-w-52"
+              className="mt-2 flex w-full items-center justify-between rounded-full bg-primary-blue px-6 py-4 text-xs font-semibold tracking-[0.18em] text-primary-on-blue uppercase transition-colors hover:bg-white hover:text-[#293241] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-blue sm:w-auto sm:min-w-52 dark:hover:bg-primary-blue/80 dark:hover:text-primary-on-blue"
             >
               Send message
               <span aria-hidden="true">→</span>
