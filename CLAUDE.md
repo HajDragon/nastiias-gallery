@@ -1,41 +1,42 @@
 # Nastiia's Gallery
 
-React + Vite + Tailwind CSS project.
+React + Vite + Tailwind CSS design prototype of the Nastiia's Gallery website. The real application is a Laravel/Inertia project; this prototype mirrors its frontend without a backend.
 
 ## Development Server
 
-A Vite development server is **already running** on port 8443. You don't need to start it manually.
-
-- Preview URL: The user can access the running app through the preview panel
-- Hot reload: Changes to source files are reflected immediately
+Run `pnpm dev`. Vite serves the app on port 8444 (`vite.config.ts`).
 
 ## Project Structure
 
-This is the canonical project structure. Start with task-relevant files below. Only follow imports or inspect other files when required, when a documented path is missing, or when the repository contradicts this guide.
-
-- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx` into the `#root` element
-- `src/App.tsx` - Primary application component and the usual starting point for UI work
-- `src/index.css` - Global CSS entrypoint and Tailwind CSS v4 import
-- `index.html` - Vite HTML shell containing the `#root` element and loading `src/main.tsx`
-- `package.json` - Project dependencies and the Vite build, development, preview, and formatting scripts
-- `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, and the `@` alias for `src`
-- `.mise.toml` - Toolchain versions for Node.js and pnpm
+- `src/main.tsx` - React entrypoint; imports `src/index.css` and mounts `src/App.tsx`
+- `src/App.tsx` - Hash-route switch, route guards, artwork modal and toaster
+- `src/pages/` - `home.tsx`, `gallery.tsx`, `auth/*` (login, register, password reset, email verification, two-factor, confirm password) and `settings/*` (profile, security, appearance)
+- `src/layouts/` - Auth and settings layouts
+- `src/components/` - Header, footer, filter bar, artwork modal, account/security components; `ui/` holds the small UI primitives
+- `src/lib/` - `i18n.ts` (translations), `router.ts` (hash routes), `demo-store.ts` and `demo-auth.ts` (localStorage stand-ins for the backend), `appearance.ts` (light/dark), `toast.ts`, `utils.ts`
+- `src/locales/` - English and Ukrainian strings, exported from the main project's `lang/*/ui.php`
+- `src/data/artworks.ts` - The demo collection
+- `src/index.css` - Tailwind v4 import, fonts, palette tokens (light + `.dark`) and animations
+- `index.html` - Vite HTML shell
+- `ontwerp-overdracht.html` - Design handoff document
 
 ## Dependencies
 
-- Runtime: React 19 and React DOM 19
+- Runtime: React 19, framer-motion, lucide-react, clsx + tailwind-merge, class-variance-authority, input-otp, qrcode
 - Styling: Tailwind CSS v4 with the `@tailwindcss/vite` plugin
-- Build tooling: Vite 8, TypeScript 5.7, and `@vitejs/plugin-react`
+- Build tooling: Vite 8, TypeScript 5.7, `@vitejs/plugin-react`
 - Formatting: oxfmt
 
 ## Styling
 
-This project uses **Tailwind CSS v4** through the `@tailwindcss/vite` plugin configured in `vite.config.ts`. `src/index.css` imports Tailwind with `@import 'tailwindcss';`. Use Tailwind utility classes directly in JSX and put global CSS or Tailwind v4 theme customization in `src/index.css`. This scaffold does not need a Tailwind config file or PostCSS config.
+Tailwind CSS v4 runs through `@tailwindcss/vite`; there is no Tailwind config or PostCSS config. Global CSS, fonts and theme tokens live in `src/index.css`. Keep CSS `@import` statements first, then `@font-face` rules.
 
-`src/main.tsx` imports `src/index.css`, so global font wiring belongs in `src/index.css`. Keep CSS `@import` statements first, then add any `@font-face` rules and font-family defaults there.
+## Demo behaviour
+
+There is no server. Accounts, likes, comments, two-factor secrets and passkeys are stored in localStorage, and no emails are sent. Two-factor codes are real TOTP codes checked in the browser; passkeys use WebAuthn without server-side signature verification.
 
 ## Code quality
 
-- Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings. An unescaped apostrophe in a single-quoted string breaks the build.
+- Use double quotes for strings containing apostrophes (`"We're here to help"`), or escape them in single-quoted strings.
 - Ensure JSX tags are closed and braces are balanced.
-- Export components as default exports.
+- Export page and layout components as default exports.

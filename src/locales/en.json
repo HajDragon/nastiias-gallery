@@ -1,24 +1,11 @@
 {
   "common": {
-    "save": "Save",
     "cancel": "Cancel",
-    "back": "Back",
     "continue": "Continue",
     "close": "Close",
-    "remove": "Remove",
-    "delete": "Delete",
     "all": "All",
-    "loading": "Loading...",
     "loading_aria": "Loading",
-    "language": "Language",
-    "english": "English",
-    "ukrainian": "Ukrainian",
-    "footer": "Footer",
-    "more": "More",
-    "sidebar": "Sidebar",
-    "sidebar_description": "Displays the mobile sidebar.",
-    "toggle_sidebar": "Toggle sidebar",
-    "breadcrumb": "Breadcrumb"
+    "language": "Language"
   },
   "nav": {
     "home": "Home",
@@ -27,11 +14,8 @@
     "account": "Account",
     "settings": "Settings",
     "log_out": "Log out",
-    "platform": "Platform",
-    "repository": "Repository",
-    "documentation": "Documentation",
-    "navigation_menu": "Navigation menu",
-    "main": "Main"
+    "main": "Main",
+    "menu": "Open menu"
   },
   "artwork": {
     "untitled": "Untitled",
@@ -41,8 +25,6 @@
     "close": "Close artwork",
     "like": "Like",
     "liked": "Liked",
-    "comments": "Comments",
-    "share": "Share",
     "add_comment": "Add a comment",
     "comment_placeholder": "Add a comment...",
     "post": "Post",
@@ -60,29 +42,9 @@
     "loading": "Loading..."
   },
   "home": {
-    "title": "nastiia.gallery — art library",
-    "filter_aria": "Filter artworks by category",
-    "click_me": "Click me!",
-    "eyebrow": "Art library",
-    "heading_1": "Curated works",
-    "heading_2": "for you",
-    "empty": "No artworks found",
-    "empty_hint": "Try a different category or check back later.",
-    "contact_eyebrow": "Get in touch",
-    "contact_heading_1": "Let's create",
-    "contact_heading_2": "something",
-    "contact_body": "Have a project in mind? Want to collaborate? Just want to say hi? We’d love to hear from you.",
-    "form_name": "Your name",
-    "form_email": "Email address",
-    "form_message": "Your message",
-    "form_submit": "Send message",
-    "copyright": "© :year nastiia.gallery. All rights reserved.",
-    "privacy": "Privacy",
-    "terms": "Terms",
-    "cookies": "Cookies"
+    "click_me": "Click me!"
   },
   "gallery": {
-    "title": "Gallery",
     "eyebrow": "The dense hang",
     "heading_1": "Wall to",
     "heading_2": "wall.",
@@ -92,8 +54,6 @@
     "previous_page": "Previous page",
     "next_page": "Next page",
     "page_of": "Page :current of :last",
-    "show_title": "Artwork",
-    "loading_comments": "Loading comments...",
     "start_conversation": "Start the conversation.",
     "share_feeling": "Share what this piece makes you feel."
   },
@@ -101,15 +61,12 @@
     "eyebrow": "Contact us",
     "title": "Let's talk about art.",
     "body": "Questions about a work, an artist, or a future visit? Send us a note and we’ll be in touch.",
-    "aria_form": "Contact Stillhouse Gallery",
+    "aria_form": "Contact Nastiia's Gallery",
     "name": "Name",
     "email": "Email",
     "message": "Message",
     "your_name": "Your name",
     "message_placeholder": "Tell us how we can help",
-    "consent_before": "I agree to the",
-    "privacy_policy": "privacy policy",
-    "consent_after": ". (Placeholder)",
     "send": "Send message",
     "sending": "Sending...",
     "submitted": "Thank you. Your message has been submitted. We will be in touch.",
@@ -145,7 +102,6 @@
     "register": {
       "title": "Create an account",
       "description": "Enter your details below to create your account",
-      "heading": "Register",
       "create": "Create account",
       "have_account": "Already have an account?",
       "log_in": "Log in"
@@ -179,7 +135,6 @@
       "log_out": "Log out"
     },
     "two_factor": {
-      "title": "Two-factor authentication",
       "recovery_title": "Recovery code",
       "recovery_description": "Please confirm access to your account by entering one of your emergency recovery codes.",
       "recovery_toggle": "login using a recovery code",
@@ -206,7 +161,6 @@
     "appearance": "Appearance"
   },
   "profile": {
-    "title": "Profile settings",
     "heading": "Profile",
     "description": "Update your display name and email address",
     "photo": "Profile photo",
@@ -231,7 +185,6 @@
     "save": "Save"
   },
   "security": {
-    "title": "Security settings",
     "password_heading": "Update password",
     "password_description": "Ensure your account is using a long, random password to stay secure",
     "current_password": "Current password",
@@ -240,7 +193,6 @@
     "save": "Save"
   },
   "appearance": {
-    "title": "Appearance settings",
     "heading": "Appearance settings",
     "description": "Update the appearance settings for your account",
     "light": "Light",
@@ -274,18 +226,14 @@
     "hide_codes": "Hide recovery codes",
     "regenerate": "Regenerate codes",
     "recovery_aria": "Recovery codes",
-    "loading_recovery": "Loading recovery codes",
     "recovery_note": "Each recovery code can be used once to access your account and will be removed after use. If you need more, click Regenerate codes above.",
-    "enabled_title": "Two-factor authentication enabled",
-    "enabled_description": "Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.",
     "verify_title": "Verify authentication code",
     "verify_description": "Enter the 6-digit code from your authenticator app",
     "setup_title": "Enable two-factor authentication",
     "setup_description": "To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app",
     "manual": "or, enter the code manually",
     "back": "Back",
-    "confirm": "Confirm",
-    "close": "Close"
+    "confirm": "Confirm"
   },
   "passkeys": {
     "heading": "Passkeys",
@@ -304,7 +252,6 @@
     "remove": "Remove",
     "remove_title": "Remove passkey",
     "remove_description": "Are you sure you want to remove the \":name\" passkey? You will no longer be able to use it to sign in.",
-    "removing": "Removing...",
     "remove_confirm": "Remove passkey"
   },
   "notifications": {
@@ -314,8 +261,7 @@
     "decline": "No thanks",
     "accept": "Yes, notify me",
     "subscribed": "Great — we'll email you when a new artwork is uploaded.",
-    "unsubscribed": "No problem — you won't receive new artwork emails.",
-    "error": "Something went wrong. Please try again."
+    "unsubscribed": "No problem — you won't receive new artwork emails."
   },
   "errors": {
     "something_wrong": "Something went wrong."
