@@ -178,6 +178,32 @@ img {
   display: block;
 }
 
+/* Language switcher — always uses dark-mode header styling (from the main project) */
+.lang-switcher {
+  --ls-bg: var(--header);
+  --ls-border: var(--header-foreground);
+  --ls-fg: var(--header-foreground);
+  --ls-accent: #a8c7e0;
+  --ls-accent-fg: #101828;
+}
+
+/* Blinking caret for the one-time-code input (tw-animate-css in the main project) */
+@keyframes caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-caret-blink {
+  animation: caret-blink 1.25s ease-out infinite;
+}
+
 @keyframes heartBurst {
   0% {
     opacity: 0;
