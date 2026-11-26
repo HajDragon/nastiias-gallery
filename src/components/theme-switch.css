@@ -69,7 +69,7 @@
 }
 
 .theme-switch:focus-within .theme-switch__container {
-  outline: 2px solid var(--color-ring, #2563eb);
+  outline: 2px solid var(--color-ring, #a8c7e0);
   outline-offset: 3px;
 }
 
