@@ -65,7 +65,7 @@ function FeedCard({
         aria-label={t("welcome.double_tap_to_like", { title })}
       >
         <div className="h-full w-full bg-card">
-          <img src={artwork.image_url} alt={artwork.alt_text} className="h-full w-full rounded-lg object-contain" loading="lazy" />
+          <img src={artwork.image_url} alt={artwork.alt_text} className="h-full w-full rounded-lg object-cover" loading="lazy" />
         </div>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#293241]/85 via-[#293241]/30 to-transparent" />
@@ -183,7 +183,7 @@ export default function Home({ onSelect }: { onSelect: (artwork: Artwork) => voi
                   <img
                     src={artwork.image_url}
                     alt={artwork.alt_text}
-                    className="h-full w-full rounded-lg object-contain transition-transform duration-700 ease-out group-hover/image:scale-[1.035]"
+                    className="h-full w-full rounded-lg object-cover transition-transform duration-700 ease-out group-hover/image:scale-[1.035]"
                     loading={index < 3 ? "eager" : "lazy"}
                     fetchPriority={index === 0 ? "high" : undefined}
                   />

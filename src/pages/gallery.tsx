@@ -65,7 +65,7 @@ export default function Gallery({ onSelect }: { onSelect: (artwork: Artwork) => 
                   <img
                     src={artwork.image_url}
                     alt={artwork.alt_text}
-                    className="h-full w-full rounded-lg object-contain transition-transform duration-700 ease-out group-hover/image:scale-[1.3]"
+                    className="h-full w-full rounded-lg object-cover transition-transform duration-700 ease-out group-hover/image:scale-[1.3]"
                     loading="lazy"
                   />
                 </div>
