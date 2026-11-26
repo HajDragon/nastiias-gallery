@@ -115,7 +115,7 @@ export default function Header() {
               <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-header">
                 <img src="/nastias-gallery-logo.png" alt="" className="h-6 w-auto object-contain invert" />
               </span>
-              <span className="min-w-0 truncate font-display text-lg tracking-tight text-foreground">nastiia.gallery</span>
+              <span className="min-w-0 truncate font-display text-lg tracking-tight text-foreground">nastia.gallery</span>
             </div>
 
             {user ? (

@@ -1,6 +1,6 @@
-# Nastiia's Gallery
+# Nastia's Gallery
 
-React + Vite + Tailwind CSS design prototype of the Nastiia's Gallery website. The real application is a Laravel/Inertia project; this prototype mirrors its frontend without a backend.
+React + Vite + Tailwind CSS design prototype of the Nastia's Gallery website. The real application is a Laravel/Inertia project; this prototype mirrors its frontend without a backend.
 
 ## Development Server
 

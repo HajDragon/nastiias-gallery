@@ -11,7 +11,7 @@ import { useTranslation } from "@/lib/i18n"
 import { navigate } from "@/lib/router"
 
 // The main project asks for this before opening the security settings.
-export const PASSWORD_CONFIRMED_KEY = "nastiia-demo-password-confirmed-at"
+export const PASSWORD_CONFIRMED_KEY = "nastia-demo-password-confirmed-at"
 
 const confirmed = () => {
   sessionStorage.setItem(PASSWORD_CONFIRMED_KEY, String(Date.now()))
