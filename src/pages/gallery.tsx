@@ -33,18 +33,18 @@ export default function Gallery({ onSelect }: { onSelect: (artwork: Artwork) => 
   return (
     <main id="gallery">
       <section className="mx-auto max-w-[1440px] px-5 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-12 lg:px-12 lg:pt-24">
-        <div className="lg:text-center">
-          <p className="mb-5 flex items-center gap-3 text-[10px] font-semibold tracking-[0.24em] uppercase sm:text-xs lg:justify-center">
+        <div className="text-center">
+          <p className="mb-5 flex items-center gap-3 text-[10px] font-semibold tracking-[0.24em] uppercase sm:text-xs justify-center">
             <span className="h-px w-8 bg-primary-blue" />
             {t("gallery.eyebrow")}
           </p>
-          <h1 className="max-w-4xl font-display text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em] lg:mx-auto">
+          <h1 className="max-w-4xl font-display text-[clamp(3.75rem,10vw,8.75rem)] leading-[0.82] tracking-[-0.055em] mx-auto">
             {t("gallery.heading_1")}
             <br />
             <span className="text-primary-blue italic">{t("gallery.heading_2")}</span>
           </h1>
-          <div className="mt-8 flex items-end justify-between border-t border-border/20 pt-4 lg:mx-auto lg:mt-12 lg:w-72 lg:flex-col lg:items-center lg:gap-3 lg:text-center">
-            <p className="max-w-48 text-sm leading-6 text-muted-foreground lg:max-w-none">{t("gallery.quote")}</p>
+          <div className="mx-auto mt-8 flex w-72 max-w-full flex-col items-center gap-3 border-t border-border/20 pt-4 text-center lg:mt-12">
+            <p className="text-sm leading-6 text-muted-foreground">{t("gallery.quote")}</p>
           </div>
         </div>
       </section>
