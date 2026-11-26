@@ -49,6 +49,10 @@ function FlipCard({ src, alt, onClick, onHoverChange, target, width, height }: F
             }}
             style={{
                 position: 'absolute',
+                left: '50%',
+                top: '50%',
+                marginLeft: -width / 2,
+                marginTop: -height / 2,
                 width,
                 height,
                 transformStyle: 'preserve-3d',
@@ -279,7 +283,7 @@ export default function IntroAnimation({ items, onSelect }: IntroAnimationProps)
             onClick={advanceStage}
         >
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
-                <div className="absolute z-0 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2">
+                <div className="absolute inset-x-0 z-0 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2">
                     <motion.h1
                         initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
                         animate={
@@ -331,7 +335,7 @@ export default function IntroAnimation({ items, onSelect }: IntroAnimationProps)
 
                 <motion.div
                     style={{ opacity: contentOpacity, y: contentY }}
-                    className="absolute top-[10%] z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4"
+                    className="absolute inset-x-0 top-[10%] z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4"
                 >
                     <h2 className="text-3xl md:text-5xl font-semibold text-gray-900 dark:text-foreground tracking-tight mb-4">
                         {t('intro.collection')}
@@ -367,8 +371,7 @@ export default function IntroAnimation({ items, onSelect }: IntroAnimationProps)
                             target = scatterPositions[i];
                         } else if (introPhase === 'line') {
                             const lineSpacing = cardWidth + 24;
-                            const lineTotalWidth = TOTAL_IMAGES * lineSpacing;
-                            const lineX = i * lineSpacing - lineTotalWidth / 2;
+                            const lineX = (i - (TOTAL_IMAGES - 1) / 2) * lineSpacing;
                             target = { x: lineX, y: 0, rotation: 0, scale: 1, opacity: 1 };
                         } else {
                             const minDimension = Math.min(
