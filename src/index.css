@@ -51,7 +51,7 @@
   --main-surface: #ffffff;
   --main-ink: #1e2533;
   --main-muted: #4c5a70;
-  --main-blue: #2563eb;
+  --main-blue: #a8c7e0;
   --main-on-blue: #ffffff;
   --main-line: #ccd8ec;
   --main-chip: #dce8fb;
@@ -75,7 +75,7 @@
   --destructive-foreground: #ffffff;
   --border: #ccd8ec;
   --input: #ccd8ec;
-  --ring: #2563eb;
+  --ring: #a8c7e0;
   --header: #293241;
   --header-foreground: #f0f7ff;
   color-scheme: light;
