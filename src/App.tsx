@@ -33,7 +33,7 @@ function redirectFor(route: Route, signedIn: boolean): Route | null {
   if (window.location.hash.split("?")[0] !== routes[route] && !(route === "home" && window.location.hash === "")) return null
   if (signedIn && guestOnly.includes(route)) return "home"
   if (!signedIn && authOnly.includes(route)) return "login"
-  if (route === "twoFactorChallenge" && !sessionStorage.getItem("nastiia-demo-2fa-email")) return "login"
+  if (route === "twoFactorChallenge" && !sessionStorage.getItem("nastia-demo-2fa-email")) return "login"
   if (route === "security") {
     const confirmedAt = Number(sessionStorage.getItem(PASSWORD_CONFIRMED_KEY) ?? 0)
     if (Date.now() - confirmedAt > PASSWORD_TIMEOUT_MS) return "confirmPassword"

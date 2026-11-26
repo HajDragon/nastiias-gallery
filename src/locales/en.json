@@ -61,7 +61,7 @@
     "eyebrow": "Contact us",
     "title": "Let's talk about art.",
     "body": "Questions about a work, an artist, or a future visit? Send us a note and we’ll be in touch.",
-    "aria_form": "Contact Nastiia's Gallery",
+    "aria_form": "Contact Nastia's Gallery",
     "name": "Name",
     "email": "Email",
     "message": "Message",
@@ -73,7 +73,7 @@
     "consent": "I agree that my details and message will be used to respond to my enquiry."
   },
   "intro": {
-    "title": "Nastiia’s Gallery.",
+    "title": "Nastia’s Gallery.",
     "explore": "CLICK TO EXPLORE",
     "collection": "The Collection",
     "quote": "“A painting is only half finished until someone stands before it. The rest of the art happens entirely within you.”",

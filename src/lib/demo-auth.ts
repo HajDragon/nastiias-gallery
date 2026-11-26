@@ -15,12 +15,12 @@ export const delay = (ms = 450) => new Promise((resolve) => setTimeout(resolve, 
 
 const secrets: Record<string, { secret: string; confirmed: boolean; recovery: string[] }> = (() => {
   try {
-    return JSON.parse(localStorage.getItem("nastiia-demo-2fa") ?? "{}")
+    return JSON.parse(localStorage.getItem("nastia-demo-2fa") ?? "{}")
   } catch {
     return {}
   }
 })()
-const saveSecrets = () => localStorage.setItem("nastiia-demo-2fa", JSON.stringify(secrets))
+const saveSecrets = () => localStorage.setItem("nastia-demo-2fa", JSON.stringify(secrets))
 
 export function login(email: string, password: string): Result | "two-factor" {
   const account = getDemoState().accounts[email.trim().toLowerCase()]
@@ -28,7 +28,7 @@ export function login(email: string, password: string): Result | "two-factor" {
 
   if (account.user.two_factor_enabled) {
     setDemoState((current) => ({ ...current, twoFactorPending: true, user: null }))
-    sessionStorage.setItem("nastiia-demo-2fa-email", account.user.email)
+    sessionStorage.setItem("nastia-demo-2fa-email", account.user.email)
     return "two-factor"
   }
 
@@ -132,7 +132,7 @@ export async function enableTwoFactor(user: User): Promise<{ svg: string; key: s
   secrets[user.email] = { secret, confirmed: false, recovery: existing?.recovery ?? makeRecoveryCodes() }
   saveSecrets()
 
-  const uri = `otpauth://totp/${encodeURIComponent(`nastiia.gallery:${user.email}`)}?secret=${secret}&issuer=nastiia.gallery`
+  const uri = `otpauth://totp/${encodeURIComponent(`nastia.gallery:${user.email}`)}?secret=${secret}&issuer=nastia.gallery`
   const svg = await QRCode.toString(uri, { type: "svg", margin: 0 })
   return { svg, key: secret }
 }
@@ -166,7 +166,7 @@ export function regenerateRecoveryCodes(user: User): string[] {
 }
 
 export async function twoFactorChallenge(input: { code?: string; recovery_code?: string }): Promise<Result> {
-  const email = sessionStorage.getItem("nastiia-demo-2fa-email") ?? ""
+  const email = sessionStorage.getItem("nastia-demo-2fa-email") ?? ""
   const account = getDemoState().accounts[email]
   const entry = secrets[email]
   if (!account || !entry) return fail("demo.credentials_failed", "code")
@@ -180,7 +180,7 @@ export async function twoFactorChallenge(input: { code?: string; recovery_code?:
     return fail("demo.code_invalid", "code")
   }
 
-  sessionStorage.removeItem("nastiia-demo-2fa-email")
+  sessionStorage.removeItem("nastia-demo-2fa-email")
   setDemoState((current) => ({ ...current, user: account.user, twoFactorPending: false }))
   return ok
 }
@@ -197,12 +197,12 @@ type StoredPasskey = Passkey & { credentialId: string; email: string; createdAt:
 
 const storedPasskeys = (): StoredPasskey[] => {
   try {
-    return JSON.parse(localStorage.getItem("nastiia-demo-passkeys") ?? "[]")
+    return JSON.parse(localStorage.getItem("nastia-demo-passkeys") ?? "[]")
   } catch {
     return []
   }
 }
-const savePasskeys = (list: StoredPasskey[]) => localStorage.setItem("nastiia-demo-passkeys", JSON.stringify(list))
+const savePasskeys = (list: StoredPasskey[]) => localStorage.setItem("nastia-demo-passkeys", JSON.stringify(list))
 
 export function listPasskeys(user: User, relative: (ms: number) => string): Passkey[] {
   return storedPasskeys()
@@ -218,7 +218,7 @@ export async function registerPasskey(user: User, name: string): Promise<void> {
   const credential = (await navigator.credentials.create({
     publicKey: {
       challenge: crypto.getRandomValues(new Uint8Array(32)),
-      rp: { name: "nastiia.gallery" },
+      rp: { name: "nastia.gallery" },
       user: { id: new TextEncoder().encode(user.email), name: user.email, displayName: user.display_name },
       pubKeyCredParams: [
         { type: "public-key", alg: -7 },

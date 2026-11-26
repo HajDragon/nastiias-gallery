@@ -16,7 +16,7 @@ type DemoState = {
   comments: Record<string, Comment[]>
 }
 
-const STORAGE_KEY = "nastiia-demo-state"
+const STORAGE_KEY = "nastia-demo-state"
 
 const initialState: DemoState = {
   user: null,

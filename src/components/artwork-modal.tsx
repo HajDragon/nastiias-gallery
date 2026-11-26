@@ -126,7 +126,7 @@ export default function ArtworkModal({ artwork, onClose }: { artwork: Artwork; o
             <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-full bg-[#293241]">
               <img src="/nastias-gallery-logo.png" alt="" className="h-5 w-auto object-contain invert" />
             </span>
-            <p className="min-w-0 flex-1 truncate text-sm font-semibold">nastiia.gallery</p>
+            <p className="min-w-0 flex-1 truncate text-sm font-semibold">nastia.gallery</p>
             <button
               type="button"
               onClick={onClose}
@@ -172,7 +172,7 @@ export default function ArtworkModal({ artwork, onClose }: { artwork: Artwork; o
                   {artwork.category?.name || t("artwork.gallery_piece")}
                 </p>
                 <p className="mt-3 text-sm leading-6 [overflow-wrap:anywhere] text-foreground/85">
-                  <span className="mr-1.5 font-semibold text-foreground">nastiia.gallery</span>
+                  <span className="mr-1.5 font-semibold text-foreground">nastia.gallery</span>
                   {artwork.description || t("artwork.no_description")}
                 </p>
               </div>
